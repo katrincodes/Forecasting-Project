@@ -1,17 +1,20 @@
+rm(list = ls())
+
 # set working directory
 
 setwd("C:/Míša")
 
 # load libraries
-library('vars')
 library('ggplot2')
 library('ggthemes')
 library('reshape') 
 library('readxl')
 library('tseries')
 library('na.tools')
-library('grangers')
 library('readr')
+library(forecast)
+
+##################################################
 
 # load dataset
 data <- read_csv("train.csv")
@@ -26,11 +29,44 @@ df <- df[order(as.Date(df$Date, format="%y-/%m-/%d")),]
 # keep only store 1
 df <- df[(df$Store == 1),]
 
+##################################################
+
 # plots
 plot(df$Date,df$Sales,type='l')
 
-#create time-series --> not finished
-ts <- ts(df, frequency=7)
+#create time-series
+sales <- ts(df$Sales, start = c(2013,1,1),end = c(2015,7,31),frequency=365)
+plot.ts(sales, ylab="Sales in Euros")
 
 # autocorrelaction function
-acf(df$Sales)
+acf(sales) # lag on every 7th day because it is Sunday
+pacf(sales)
+Acf(sales) 
+Pacf(sales)
+
+# DF test 
+adf.test(sales) # rejects the null so we have a stationary time series
+# it says lag order 9 --> I will use it in ARIMA
+
+
+# KPSS test --> not sure if useful
+kpss.test(sales)
+
+# ARIMA
+# fit an ARIMA model of order P, D, Q --> I just tried it
+# and it gives quite okay result compared to others
+fit <- arima(sales, order=c(9,0,0))
+
+# check residuals
+checkresiduals(fit)
+        
+# predictive accuracy
+accuracy(fit)
+
+# forecast next 10 observations
+forecast(fit, 50)
+plot(forecast(fit, 50)) 
+
+# I also tried others, but they were not nice
+fit1 <- arima(sales, order=c(2,1,0))
+plot(forecast(fit1, 50))
