@@ -1,6 +1,6 @@
     ##################################
-    # Forecasting Project            #
-    #Retail Sales data Rossmann      #
+    #    Forecasting Project         #
+    #  Retail Sales data Rossmann    #
     ##################################
 
 rm(list = ls())
@@ -17,7 +17,6 @@ library(fpp2)
 ## Load data
 
 data <- read.csv("C:\\Users\\KAug\\Desktop\\Uni\\3. Semester\\Forecasting\\Project\\train.csv", header = TRUE, sep = ",")
-
 #data$Date <- as.Date(data$Date, format = "%y-/%m-/%d")
 #data <- data[order(data$Date),]
 #view(data)
@@ -44,4 +43,5 @@ ggseasonplot(sales) + ggtitle("Seasonal Plot")
 ##Plots for first analysis of time-series
 acf(sales, main = "ACF of sales")
 pacf(sales, main = "PACF sales")
-adf.test(sales) ## Lag order 9? Doesn't seem to make sense intuitively - ACF and PACF also dnt say much?! 
+adf.test(sales)
+    # Lag order 9? Doesn't seem to make sense intuitively - ACF and PACF also dnt say much?! (Probabyl because my data is still not sorted right?!)
