@@ -11,6 +11,7 @@ getwd()
 library(tidyverse)
 library(tseries)
 library(vars)
+library(fpp2)
 
 
 ## Load data
@@ -32,7 +33,12 @@ view(Store1)
 
 ## Create Time Series & plot
 sales=ts(Store1$Sales, start = c(2013), frequency = 365) # Still wrong (begins with 2015) 
-plot.ts(sales, ylab="Sales in Euros") ## High Sales in fall of 2013/2014.... 
+plot.ts(sales, ylab="Sales in Euros")
+    # High Sales in fall of 2013/2014....
+
+## Investigate Seasonalitiy
+ggseasonplot(sales) + ggtitle("Seasonal Plot")
+ #wow, you can see nothing here?
 
 
 ##Plots for first analysis of time-series
